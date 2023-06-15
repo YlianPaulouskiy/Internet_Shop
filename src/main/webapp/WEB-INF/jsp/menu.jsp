@@ -9,8 +9,7 @@
 <form action="${pageContext.request.contextPath}/products" method="get">
     <button type="submit">Product Catalog</button>
 </form>
-<form action="${pageContext.request.contextPath}/products" method="get">
-    not complete
+<form action="${pageContext.request.contextPath}/user/products" method="get">
     <button type="submit">Your products</button>
 </form>
 <form action="${pageContext.request.contextPath}/orders" method="get">

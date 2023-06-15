@@ -30,7 +30,7 @@ public class EntityManager {
                 .password(result.getString("password"))
                 .phone(result.getString("phone"))
                 .address(buildAddress(result))
-                .products(ProductDao.getInstance().findByUserId(result.getLong("user_id"))/* productRepo findByUserId()*/)
+                .products(ProductDao.getInstance().findAllByUserId(result.getLong("user_id")))
                 .build();
     }
 

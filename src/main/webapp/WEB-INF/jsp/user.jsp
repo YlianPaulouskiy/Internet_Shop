@@ -60,7 +60,7 @@
 </form>
 
 <form action="${pageContext.request.contextPath}/user/delete" method="post">
-    <button type="submit">Delete Account</button>
+    <button type="submit" style="background-color: coral">Delete Account</button>
 </form>
 
 <h4>Address:</h4>

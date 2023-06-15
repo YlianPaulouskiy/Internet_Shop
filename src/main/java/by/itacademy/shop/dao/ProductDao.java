@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class ProductDao implements Dao<Long, Product> {
+public class ProductDao {
 
     private static final ProductDao INSTANCE = new ProductDao();
 
@@ -35,9 +35,6 @@ public class ProductDao implements Dao<Long, Product> {
             JOIN addresses a on u.id = a.user_id
             """;
 
-
-    private static final String FIND_BY_ID = FIND_ALL_WITH_USER + " WHERE pr.id = ?";
-
     private static final String SAVE_SQL = """
             INSERT INTO products(name, description, price, user_id)
             VALUES (?, ?, ?, ?);
@@ -48,34 +45,7 @@ public class ProductDao implements Dao<Long, Product> {
             WHERE id = ?
             """;
 
-    private static final String UPDATE_SQL = """
-            UPDATE products
-            SET name =?,
-                        description =?,
-                        price = ?,
-                        user_id = ?
-            WHERE id = ?
-            """;
-
     private static final String FIND_PRODUCTS_BY_USER_ID = FIND_ALL + " where user_id = ?";
-
-
-    public Optional<Product> findById(Long id) {
-        try (var connection = ConnectionManager.get();
-             var prepareStatement = connection.prepareStatement(FIND_BY_ID)) {
-            Product product = null;
-            prepareStatement.setLong(1, id);
-            var result = prepareStatement.executeQuery();
-            if (result.next()) {
-                product = EntityManager.buildProduct(result);
-            }
-            return product != null
-                    ? Optional.of(product)
-                    : Optional.empty();
-        } catch (SQLException exception) {
-            throw new DaoException(exception);
-        }
-    }
 
     public List<Product> findAll() {
         try (var connection = ConnectionManager.get();
@@ -90,10 +60,10 @@ public class ProductDao implements Dao<Long, Product> {
         }
     }
 
-    public List<Product> findByUserId(Long id) {
+    public List<Product> findAllByUserId(Long userId) {
         try (var connection = ConnectionManager.get();
              var prepareStatement = connection.prepareStatement(FIND_PRODUCTS_BY_USER_ID)) {
-            prepareStatement.setLong(1, id);
+            prepareStatement.setLong(1, userId);
             List<Product> products = new ArrayList<>();
             var result = prepareStatement.executeQuery();
             while (result.next()) {
@@ -114,29 +84,12 @@ public class ProductDao implements Dao<Long, Product> {
             if (generatedKeys.next()) {
                 product.setId(generatedKeys.getLong("id"));
             }
-//            saveOrderProduct(product.getId(), product.getOrders(), connection);
-//            saveStoreProduct(product.getId(), product.getStores(), connection);
             return product.getId() != null
                     ? Optional.of(product)
                     : Optional.empty();
         } catch (SQLException exception) {
             throw new DaoException(exception);
         }
-//        return Optional.empty();
-    }
-
-    public boolean update(Product product) {
-//        try (var connection = ConnectionManager.get();
-//             var prepareStatement = connection.prepareStatement(UPDATE_SQL)) {
-//            setFieldsAtSql(product, prepareStatement);
-//            prepareStatement.setLong(5, product.getId());
-//            updateOrderProduct(product.getId(), product.getOrders(), connection);
-//            updateStoreProduct(product.getId(), product.getStores(), connection);
-//            return prepareStatement.executeUpdate() > 0;
-//        } catch (SQLException exception) {
-//            throw new DaoException(exception);
-//        }
-        return false;
     }
 
     public boolean delete(Long id) {
@@ -151,88 +104,6 @@ public class ProductDao implements Dao<Long, Product> {
 
     //---------------------------------------------------------------------------------------------------------------
 
-//    /**
-//     * Устанавливаем данные в таблицу связи многие ко многим order_product
-//     *
-//     * @param productId  id продукта
-//     * @param ordersId   список заказов в который входит данный продукт
-//     * @param connection соединение с базой
-//     */
-//    private void saveOrderProduct(Long productId, List<Long> ordersId, Connection connection) throws SQLException {
-//        for (Long orderId : ordersId) {
-//            String orderProductSql = """
-//                    INSERT INTO order_product(order_id, product_id)
-//                    VALUES (?,%d);
-//                    """.formatted(productId);
-//            try (var prepareStatement = connection.prepareStatement(orderProductSql)) {
-//                prepareStatement.setLong(1, orderId);
-//                prepareStatement.executeUpdate();
-//            }
-//        }
-//    }
-//
-//    /**
-//     * Обновляем данные в таблице order_product
-//     *
-//     * @param productId  id продукта
-//     * @param ordersId   список заказов в который входит данный продукт
-//     * @param connection соединение с базой
-//     */
-//    private void updateOrderProduct(Long productId, List<Long> ordersId, Connection connection) throws SQLException {
-//        for (Long orderId : ordersId) {
-//            String orderProductSql = """
-//                    UPDATE order_product
-//                    SET order_id = ?
-//                    WHERE product_id = %d
-//                    """.formatted(productId);
-//            try (var prepareStatement = connection.prepareStatement(orderProductSql)) {
-//                prepareStatement.setLong(1, orderId);
-//                prepareStatement.executeUpdate();
-//            }
-//        }
-//    }
-
-    /**
-     * Устанавливаем данные в таблицу связи многие ко многим store_product
-     *
-     * @param productId  id продукта
-     * @param storesId   список магазинов в который входит данный продукт
-     * @param connection соединение с базой
-     */
-//    private void saveStoreProduct(Long productId, List<Long> storesId, Connection connection) throws SQLException {
-//        for (Long storeId : storesId) {
-//            String storeProductSql = """
-//                    INSERT INTO store_product(store_id, product_id)
-//                    VALUES (?, %d);
-//                    """.formatted(productId);
-//            try (var prepareStatement = connection.prepareStatement(storeProductSql)) {
-//                prepareStatement.setLong(1, storeId);
-//                prepareStatement.executeUpdate();
-//            }
-//        }
-//    }
-
-    /**
-     * Обновляем данные в таблице связи store_product
-     *
-     * @param productId  id продукта
-     * @param storesId   список магазинов в который входит данный продукт
-     * @param connection соединение с базой
-     */
-//    private void updateStoreProduct(Long productId, List<Long> storesId, Connection connection) throws SQLException {
-//        for (Long storeId : storesId) {
-//            String storeProductSql = """
-//                    UPDATE store_product
-//                    SET store_id = ?
-//                    WHERE product_id = %d
-//                    """.formatted(productId);
-//            try (var prepareStatement = connection.prepareStatement(storeProductSql)) {
-//                prepareStatement.setLong(1, storeId);
-//                prepareStatement.executeUpdate();
-//            }
-//        }
-//    }
-
     /**
      * Устанавливает поля в sql запросы save и update
      *
@@ -243,9 +114,7 @@ public class ProductDao implements Dao<Long, Product> {
         prepareStatement.setString(1, product.getName());
         prepareStatement.setString(2, product.getDescription());
         prepareStatement.setBigDecimal(3, product.getPrice());
-        if (product.getUser() != null && product.getUser().getId() != null) {
-            prepareStatement.setLong(4,product.getUser().getId());
-        }
+        prepareStatement.setLong(4, product.getUser().getId());
     }
 
 }

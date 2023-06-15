@@ -23,9 +23,8 @@ public class UserService {
 
     public Optional<UserReadDto> create(StringUserDto userDto) {
         checkValidation(userDto);
-        var user = userMapper.toEntity(userDto);
-       checkExists(user);
-        return userDao.save(user)
+       checkExists(userDto);
+        return userDao.save(userMapper.toEntity(userDto))
                 .map(userMapper::toDto);
     }
 
@@ -54,9 +53,9 @@ public class UserService {
         }
     }
 
-    private void checkExists(User user) {
-        if (userDao.findAll().contains(user)) {
-            throw new EntityExistsException("User email " + user.getEmail() + " already exists.");
+    private void checkExists(StringUserDto userDto) {
+        if (userDao.findAll().contains(userMapper.toEntity(userDto))) {
+            throw new EntityExistsException("User email " + userDto.getEmail() + " already exists.");
         }
     }
 
