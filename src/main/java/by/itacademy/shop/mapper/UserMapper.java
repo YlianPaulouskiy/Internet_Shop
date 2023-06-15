@@ -6,12 +6,8 @@ import by.itacademy.shop.entity.User;
 import org.mapstruct.Mapper;
 
 @Mapper
-public interface UserMapper {
+public interface UserMapper extends by.itacademy.shop.mapper.Mapper<User, UserReadDto> {
 
     User toEntity(StringUserDto userDto);
-
-    User toEntity(UserReadDto userReadDto);
-
-    UserReadDto toDto(User user);
 
 }

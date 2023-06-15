@@ -40,8 +40,7 @@
 <p>
 
 <h4>Personal Info</h4>
-<form>
-
+<form action="/user" method="post">
     <strong>Name:</strong> ${sessionScope.get("user").getName()}
     <input type="text" name="name">
     <br>
@@ -59,6 +58,47 @@
     <br>
     <button type="submit">Change Personal Info</button>
 </form>
+
+<form action="${pageContext.request.contextPath}/user/delete" method="post">
+    <button type="submit">Delete Account</button>
+</form>
+
+<h4>Address:</h4>
+<form action="/address/save" method="post">
+    <strong>City:</strong> ${sessionScope.get("address").getCity()}
+    <input type="text" name="city">
+    <br>
+    <strong>Street:</strong> ${sessionScope.get("address").getStreet()}
+    <input type="text" name="street">
+    <br>
+    <strong>House:</strong> ${sessionScope.get("address").getHouse()}
+    <input type="text" name="house">
+    <br>
+    <strong>Flat:</strong> ${sessionScope.get("address").getFlat()}
+    <input type="text" name="flat">
+    <br>
+    <button type="submit">Change Address</button>
+</form>
+
+<form action="address/delete" method="post">
+    <button type="submit">Delete Address</button>
+</form>
+
+<form action="${pageContext.request.contextPath}/menu" method="get">
+    <button type="submit">
+        <b>Back</b>
+    </button>
+</form>
+
+<c:if test="${not empty requestScope.get('errors')}">
+    <div style="color: red">
+        <c:forEach var="error" items="${requestScope.get('errors')}">
+            <span>${error}</span>
+            <br>
+        </c:forEach>
+        <br>
+    </div>
+</c:if>
 
 </body>
 </html>

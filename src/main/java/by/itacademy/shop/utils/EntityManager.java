@@ -1,7 +1,6 @@
 package by.itacademy.shop.utils;
 
 import by.itacademy.shop.dao.ProductDao;
-import by.itacademy.delivery.entity.*;
 import by.itacademy.shop.entity.Address;
 import by.itacademy.shop.entity.Product;
 import by.itacademy.shop.entity.User;
