@@ -19,7 +19,7 @@ public class ProductDeleteServlet extends HttpServlet {
     private final ProductService productService = new ProductService();
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         var user = (UserReadDto) req.getSession().getAttribute("user");
         productService.delete(Long.parseLong(req.getParameter("id")));
         req.setAttribute("products", productService.findAllByUserId(user.getId()));

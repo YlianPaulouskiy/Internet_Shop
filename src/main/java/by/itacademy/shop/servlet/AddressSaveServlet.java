@@ -29,8 +29,8 @@ public class AddressSaveServlet extends HttpServlet {
         if (req.getSession().getAttribute("address") != null) {
             addressService.update(user.getId(), address);
         } else {
-        try {
-            addressService.save(user.getId(), address);
+            try {
+                addressService.save(user.getId(), address);
             } catch (ConstraintViolationException | EntityExistsException exception) {
                 req.setAttribute("errors", exception.getMessage().split(","));
                 req.getRequestDispatcher(MENU).forward(req, resp);
@@ -48,7 +48,7 @@ public class AddressSaveServlet extends HttpServlet {
         var flat = req.getParameter("flat");
         return AddressReadDto.builder()
                 .city(city == null || city.isBlank()
-                ? address.getCity() : city)
+                        ? address.getCity() : city)
                 .street(street == null || street.isBlank()
                         ? address.getStreet() : street)
                 .house(house == null || house.isBlank()

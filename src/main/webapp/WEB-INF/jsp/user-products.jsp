@@ -36,7 +36,7 @@
             <td>${product.getDescription()}</td>
             <td>${product.getPrice()}</td>
             <td>
-                <form action="${pageContext.request.contextPath}/products/delete" method="post">
+                <form action="${pageContext.request.contextPath}/products/delete" method="get">
                     <button type="submit" name="id" value="${product.getId()}">delete</button>
                 </form>
             </td>
