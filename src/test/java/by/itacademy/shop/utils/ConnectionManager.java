@@ -16,14 +16,14 @@ public class ConnectionManager {
 
     private static void loadDriver() {
         try {
-            Class.forName("org.postgresql.Driver");
+            Class.forName("org.h2.Driver");
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
     }
 
     public static Connection get() {
-            return open();
+        return open();
     }
 
     private static Connection open() {

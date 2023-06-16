@@ -13,6 +13,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import static by.itacademy.shop.utils.UrlPath.MENU;
@@ -26,6 +27,7 @@ public class OrderSaveServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         orderService.save(buildOrder(req));
+        req.getSession().setAttribute("orderProducts", new ArrayList<>());
         resp.sendRedirect(MENU);
     }
 
