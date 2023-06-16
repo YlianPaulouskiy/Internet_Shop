@@ -36,11 +36,20 @@ public class ProductSaveServlet extends HttpServlet {
     }
 
     private ProductReadDto buildProduct(UserReadDto user, HttpServletRequest req) {
-        return ProductReadDto.builder()
-                .name(req.getParameter("name"))
-                .description(req.getParameter("description"))
-                .price(new BigDecimal(req.getParameter("price")))
-                .user(user)
-                .build();
+        try {
+            return ProductReadDto.builder()
+                    .name(req.getParameter("name"))
+                    .description(req.getParameter("description"))
+                    .price(new BigDecimal(req.getParameter("price")))
+                    .user(user)
+                    .build();
+        } catch (NumberFormatException exception) {
+            return ProductReadDto.builder()
+                    .name(req.getParameter("name"))
+                    .description(req.getParameter("description"))
+                    .price(BigDecimal.ZERO)
+                    .user(user)
+                    .build();
+        }
     }
 }

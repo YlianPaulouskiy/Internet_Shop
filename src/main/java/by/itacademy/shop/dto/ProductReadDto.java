@@ -8,6 +8,7 @@ import java.math.BigDecimal;
 
 @Builder
 @Value
+@EqualsAndHashCode(of = "name")
 public class ProductReadDto {
 
     Long id;

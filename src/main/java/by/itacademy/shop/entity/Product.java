@@ -17,5 +17,4 @@ public class Product {
     private BigDecimal price;
 
     private User user;
-//    private List<Order> orders;
 }

@@ -3,20 +3,17 @@
 <%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <html>
 <head>
-    <title>Products</title>
+    <title>User Products</title>
     <style type="text/css">
         table {
-            width: 300px; /* Ширина таблицы */
-            border-collapse: collapse; /* Убираем двойные линии между ячейками */
+            width: auto;
+            min-width: 300px;
+            border-collapse: collapse;
         }
 
         td, th {
-            padding: 3px; /* Поля вокруг содержимого таблицы */
-            border: 1px solid black; /* Параметры рамки */
-        }
-
-        th {
-            background: #b0e0e6; /* Цвет фона */
+            padding: 3px;
+            border: 1px solid black;
         }
     </style>
 </head>
@@ -24,7 +21,7 @@
 
 <h3>Products by ${sessionScope.get("user").getEmail()}</h3>
 
-<table style="">
+<table>
     <tr>
         <td>№</td>
         <td>name</td>
@@ -46,13 +43,6 @@
         </tr>
     </c:forEach>
 </table>
-
-<br>
-<form action="${pageContext.request.contextPath}/menu" method="get">
-    <button type="submit">
-        <b>Back</b>
-    </button>
-</form>
 
 <form action="${pageContext.request.contextPath}/products/save" method="post">
     <h4>Add product</h4>
@@ -79,6 +69,12 @@
     </div>
 </c:if>
 
+<br>
+<form action="${pageContext.request.contextPath}/menu" method="get">
+    <button type="submit">
+        <b>Back</b>
+    </button>
+</form>
 
 </body>
 </html>

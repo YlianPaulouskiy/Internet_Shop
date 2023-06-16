@@ -35,6 +35,8 @@ public class ProductDao {
             JOIN addresses a on u.id = a.user_id
             """;
 
+    private static final String FIND_BY_ID = FIND_ALL_WITH_USER + " WHERE p.id = ?";
+
     private static final String SAVE_SQL = """
             INSERT INTO products(name, description, price, user_id)
             VALUES (?, ?, ?, ?);
@@ -46,6 +48,24 @@ public class ProductDao {
             """;
 
     private static final String FIND_PRODUCTS_BY_USER_ID = FIND_ALL + " where user_id = ?";
+
+    private static final String FIND_PRODUCTS_BY_ORDER_ID = FIND_ALL_WITH_USER
+                                                            + " JOIN order_product op on p.id = op.product_id WHERE op.order_id = ?";
+
+    public Optional<Product> findById(Long id) {
+        try (var connection = ConnectionManager.get();
+             var prepareStatement = connection.prepareStatement(FIND_BY_ID)) {
+            prepareStatement.setLong(1, id);
+            Product product = null;
+            var result = prepareStatement.executeQuery();
+            if (result.next()) {
+                product = EntityManager.buildProductWithUser(result);
+            }
+            return Optional.ofNullable(product);
+        } catch (SQLException exception) {
+            throw new DaoException(exception);
+        }
+    }
 
     public List<Product> findAll() {
         try (var connection = ConnectionManager.get();
@@ -68,6 +88,21 @@ public class ProductDao {
             var result = prepareStatement.executeQuery();
             while (result.next()) {
                 products.add(EntityManager.buildProduct(result));
+            }
+            return products;
+        } catch (SQLException exception) {
+            throw new DaoException(exception);
+        }
+    }
+
+    public List<Product> findAllByOrderId(Long orderId) {
+        try (var connection = ConnectionManager.get();
+             var prepareStatement = connection.prepareStatement(FIND_PRODUCTS_BY_ORDER_ID)) {
+            prepareStatement.setLong(1, orderId);
+            List<Product> products = new ArrayList<>();
+            var result = prepareStatement.executeQuery();
+            while (result.next()) {
+                products.add(EntityManager.buildProductWithUser(result));
             }
             return products;
         } catch (SQLException exception) {

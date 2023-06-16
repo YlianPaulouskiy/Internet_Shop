@@ -2,8 +2,6 @@ package by.itacademy.shop.service;
 
 import by.itacademy.shop.dao.ProductDao;
 import by.itacademy.shop.dto.ProductReadDto;
-import by.itacademy.shop.dto.StringUserDto;
-import by.itacademy.shop.entity.User;
 import by.itacademy.shop.exception.EntityExistsException;
 import by.itacademy.shop.mapper.ProductMapper;
 import by.itacademy.shop.mapper.ProductMapperImpl;
@@ -19,6 +17,10 @@ public class ProductService {
 
     private final ProductDao productDao = ProductDao.getInstance();
     private final ProductMapper productMapper = new ProductMapperImpl();
+
+    public Optional<ProductReadDto> findById(Long id) {
+        return productDao.findById(id).map(productMapper::toDto);
+    }
 
     public List<ProductReadDto> findAll() {
         return productDao.findAll()
