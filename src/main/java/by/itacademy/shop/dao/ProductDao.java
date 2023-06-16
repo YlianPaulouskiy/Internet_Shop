@@ -139,12 +139,6 @@ public class ProductDao {
 
     //---------------------------------------------------------------------------------------------------------------
 
-    /**
-     * Устанавливает поля в sql запросы save и update
-     *
-     * @param product          модель из которой берутся поля
-     * @param prepareStatement запрос в который нужно установить поля из модели
-     */
     private void setFieldsAtSql(Product product, PreparedStatement prepareStatement) throws SQLException {
         prepareStatement.setString(1, product.getName());
         prepareStatement.setString(2, product.getDescription());

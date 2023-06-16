@@ -91,13 +91,6 @@ public class OrderDao {
 
     //---------------------------------------------------------------------------------------------------------------
 
-    /**
-     * Устанавливаем данные в таблицу связи многие ко многим order_product
-     *
-     * @param orderId    id заказа
-     * @param productsId список продуктов в заказе
-     * @param connection соединение с базой
-     */
     private void saveOrderProduct(Long orderId, List<Long> productsId, Connection connection) throws SQLException {
         for (Long productId : productsId) {
             String orderProductSql = """
